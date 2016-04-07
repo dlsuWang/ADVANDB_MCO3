@@ -162,8 +162,12 @@ public class Layout extends JFrame{
 	 public void localCase1() {
 		 // Thread 1 and thread 2 read		 
 		 Transaction read = new Transaction(getIsolationLevel(), getReadStatement());
-		 Thread thread1 = new Thread(new TransactionRunnable(read));
-		 Thread thread2 = new Thread(new TransactionRunnable(read));
+		 TransactionRunnable readTransaction = new TransactionRunnable(read);
+		 TransactionRunnable readTransaction2 = new TransactionRunnable(read);
+
+		 
+		 Thread thread1 = new Thread(readTransaction);
+		 Thread thread2 = new Thread(readTransaction2);
 		 thread1.start();
 		 thread2.start();
 	 }
@@ -172,8 +176,11 @@ public class Layout extends JFrame{
 		 // Thread 1 writes. Thread 2 reads.
 		 Transaction read = new Transaction(getIsolationLevel(), getReadStatement());
 		 Transaction write = new Transaction(getIsolationLevel(), getWriteStatement());
-		 Thread thread1 = new Thread(new TransactionRunnable(write));
-		 Thread thread2 = new Thread(new TransactionRunnable(read));
+		 TransactionRunnable readTransaction = new TransactionRunnable(read);
+		 TransactionRunnable writeTransaction = new TransactionRunnable(write);
+
+		 Thread thread1 = new Thread(writeTransaction);
+		 Thread thread2 = new Thread(readTransaction);
 		 thread1.start();
 		 thread2.start();
 	 }
@@ -182,8 +189,10 @@ public class Layout extends JFrame{
 		 // Thread 1 writes. Thread 2 writes.
 		 String statement;
 		 Transaction write = new Transaction(getIsolationLevel(), getWriteStatement());
-		 Thread thread1 = new Thread(new TransactionRunnable(write));
-		 Thread thread2 = new Thread(new TransactionRunnable(write));
+		 TransactionRunnable writeTransaction = new TransactionRunnable(write);
+		 TransactionRunnable writeTransaction2 = new TransactionRunnable(write);
+		 Thread thread1 = new Thread(writeTransaction);
+		 Thread thread2 = new Thread(writeTransaction2);
 		 thread1.start();;
 		 thread2.start();
 		 
