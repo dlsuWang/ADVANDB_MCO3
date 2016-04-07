@@ -3,20 +3,33 @@ public class TransactionRunnable implements Runnable {
 
 	// EACH NODE IS ONE THREAD
 	
-	private DBConnector connection;
 	private Transaction transaction;
+	private String statement;
+	private IsolationLevel isolation;
 	
 	public TransactionRunnable(String transaction) {
 		this.transaction = transaction;
-		
-		DBConnector.queryDB(transaction.getSQL());
-		// send to database
+		this.statement = transaction.getSQL();
+		this.isolation = transaction.getIsolationLevel();
+	}
+	
+	public String getIsolationStatement(IsolationLevel isolation) {
+		String isolationStatement = "SET TRANSACTION LEVEL ";
+		switch (isolation) {
+			case READ_UNCOMMITTED: isolationStatement.concat("READ UNCOMMITTED; "); break; 
+			case READ_COMMITTED: ; isolationStatement.concat("READ COMMITTED; "); break;
+			case READ_REPEATABLE: isolationStatement.concat("REPEATABLE READ; "); break;
+			case SERIALIZABLE: isolationStatement.concat("SERIALIZABLE; "); break;
+		}
+		return isolationStatement;
 	}
 	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
+		if (isolation != NONE) {
+			 statement = getIsolationStatement(isolation).concat(statement);
+		}
+		DBConnector.queryDB(statement);
 	}
-
 }
