@@ -6,6 +6,7 @@ public class TransactionRunnable implements Runnable {
 	private Transaction transaction;
 	private String statement;
 	private IsolationLevel isolation;
+	private ResultSet result;
 	
 	public TransactionRunnable(String transaction) {
 		this.transaction = transaction;
@@ -30,6 +31,6 @@ public class TransactionRunnable implements Runnable {
 		if (isolation != NONE) {
 			 statement = getIsolationStatement(isolation).concat(statement);
 		}
-		DBConnector.queryDB(statement);
+		result = DBConnector.queryDB(statement);
 	}
 }

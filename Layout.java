@@ -19,6 +19,8 @@ public class Layout extends JFrame {
    	 	JButton btn_cs2 = new JButton("Case 2");
      	JButton btn_cs3 = new JButton("Case 3");
      	JTextArea queryArea = new JTextArea("Hello", 20, 50);
+     	JTextBox idInput = new JTextBox();
+     	JTextBox ageInput = new JTextBox();
      
         p1.setLayout(new BorderLayout());
        
@@ -55,6 +57,7 @@ public class Layout extends JFrame {
             }
         });
   
+        
     }
     
     
