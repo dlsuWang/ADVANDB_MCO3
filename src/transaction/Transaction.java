@@ -1,17 +1,18 @@
+package transaction;
 
 public class Transaction {
 	
-	private IsolationLevel level
+	private IsolationLevel level;
 	private String sql; 
 	private boolean readOnly;
 	
 	public Transaction(String sql) {
-		level = NONE;
+		level = IsolationLevel.NONE;
 		this.sql = sql;
 	}
 	
 	public Transaction(boolean readOnly, String sql) {
-		level = NONE;
+		level = IsolationLevel.NONE;
 		this.readOnly = readOnly;
 		this.sql = sql;
 	}
@@ -32,8 +33,8 @@ public class Transaction {
 		this.readOnly = readOnly;
 	}
 	
-	pulic void setIsolationLevel(IsolationLevel isolation) {
-		this.isolation = isolation;
+	public void setIsolationLevel(IsolationLevel level) {
+		this.level = level;
 	}
 	
 	public void setSQL(String sql) {

@@ -1,3 +1,8 @@
+package transaction;
+
+import java.sql.ResultSet;
+
+import network.DBConnector;
 
 public class TransactionRunnable implements Runnable {
 
@@ -7,8 +12,10 @@ public class TransactionRunnable implements Runnable {
 	private String statement;
 	private IsolationLevel isolation;
 	private ResultSet result;
+	private DBConnector connector;
 	
-	public TransactionRunnable(String transaction) {
+	public TransactionRunnable(Transaction transaction) {
+		connector = new DBConnector();
 		this.transaction = transaction;
 		this.statement = transaction.getSQL();
 		this.isolation = transaction.getIsolationLevel();
@@ -28,9 +35,14 @@ public class TransactionRunnable implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		if (isolation != NONE) {
+		if (isolation != IsolationLevel.NONE) {
 			 statement = getIsolationStatement(isolation).concat(statement);
 		}
-		result = DBConnector.queryDB(statement);
+		try {
+			result = connector.queryDB(statement);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
