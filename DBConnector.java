@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBConnector {
@@ -11,7 +12,11 @@ public class DBConnector {
 	private CallableStatement callableStatement;
 	private Statement statement;
 	private ResultSet resultSet;
-
+	public static int READ_UNCOMMITED = Connection.TRANSACTION_READ_UNCOMMITTED;
+	public static int READ_COMMITED = Connection.TRANSACTION_READ_COMMITTED;
+	public static int REPEATABLE_READ = Connection.TRANSACTION_REPEATABLE_READ;
+	public static int SERIALIZABLE = Connection.TRANSACTION_SERIALIZABLE;
+	
 	public ResultSet queryDB(String query) throws Exception{
 		try{
 			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_hpq_palawan", "root", "");
@@ -49,6 +54,38 @@ public class DBConnector {
 	    	}
 	    } 
 	    catch(Exception e){}
+	}
+	
+	public void setAutoCommit(boolean b){
+
+		try{
+			if(connection != null)
+				connection.setAutoCommit(b);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void setIsolation(int isolation){
+			
+		try{
+			if(connection != null)
+			connection.setTransactionIsolation(isolation);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void rollBack(){
+		
+		try{
+			if(connection != null)
+				connection.rollback();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static void main(String[] args){
